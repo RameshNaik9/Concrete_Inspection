@@ -54,7 +54,7 @@ def val_epoch(epoch, data_loader, model, criterion, opt, logger, criterion_pose)
 
         with torch.no_grad():
           if not opt.no_cuda:
-            targets = targets.cuda(async=True)
+            targets = targets.cuda(non_blocking=True)
 
 
             outputs  = model(input_imgs)
@@ -62,7 +62,7 @@ def val_epoch(epoch, data_loader, model, criterion, opt, logger, criterion_pose)
 
             acc    = calculate_accuracy(outputs, targets)
 
-            losses.update(loss.data[0], input_imgs.size(0))
+            losses.update(loss.item(), input_imgs.size(0))
             accuracies.update(acc, input_imgs.size(0))
 
         batch_time.update(time.time() - end_time)

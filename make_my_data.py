@@ -45,8 +45,9 @@ import random
 import cv2
 
 
+# basic_path = '/home/eric/disk/fcnForSpallingCrack/crack_spalling_detect/SPallData/deepLearningBridgeInspection/'
+basic_path = "../pytorch_Concrete_Inspection/SPallData/deepLearningBridgeInspection/"
 
-basic_path = '/home/eric/disk/fcnForSpallingCrack/crack_spalling_detect/SPallData/deepLearningBridgeInspection/'
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning (https://github.com/python-pillow/Pillow/issues/835)

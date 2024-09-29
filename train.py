@@ -53,8 +53,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
     for i, (input_imgs, targets) in enumerate(data_loader):
         data_time.update(time.time() - end_time)
         if not opt.no_cuda:
-            targets = targets.cuda(async=True)
-
+            targets = targets.cuda(non_blocking=True)
 
         input_imgs = Variable(input_imgs, requires_grad=True)
 
@@ -63,7 +62,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, opt,
 
         acc    = calculate_accuracy(outputs, targets)
 
-        losses.update(loss.data[0], input_imgs.size(0))
+        losses.update(loss.item(), input_imgs.size(0))
         accuracies.update(acc, input_imgs.size(0))
 
         optimizer.zero_grad()
