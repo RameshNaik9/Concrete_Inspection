@@ -100,8 +100,8 @@ if __name__ == '__main__':
 
     # load the prepared data
     with torch.no_grad():
-        all_path = '/image_and_results/image'
-        output   = '/image_and_results/output'
+        all_path = 'image_and_results/image/'
+        output   = 'image_and_results/output/'
         for file in os.listdir(all_path):
            if file.endswith('.png'):
                img_path = all_path + file
