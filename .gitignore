@@ -1,0 +1,4 @@
+/resnet34/*pth
+/fastapi-env
+**/__pycache__/
+image_and_results/output

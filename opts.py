@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 
 def parse_opts():
@@ -207,6 +208,12 @@ def parse_opts():
     parser.add_argument(
         '--manual_seed', default=1, type=int, help='Manually set random seed')
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
+    # If this script is run directly (e.g., for training), process command-line arguments.
+    # But if no command-line arguments are passed (as with Uvicorn), use defaults.
+    if "uvicorn" in sys.argv[0]:
+        args = parser.parse_args([])  # If running in Uvicorn, ignore command-line args
+    else:
+        args = parser.parse_args()  # Otherwise, process command-line args
 
     return args

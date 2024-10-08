@@ -37,54 +37,45 @@ import torch
 from torch import nn
 from torch import optim
 from torch.optim import lr_scheduler
-
 from opts import parse_opts
 from model import generate_model
-
-
 from utils import Logger
 from train import train_epoch
 from validation import val_epoch
-
 from torch.autograd import Variable
-
-
 from models import resnet as resnet
 import pickle
-
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-
 from PIL import Image
-
+import torch
 import cv2
+import ssl
 
+ssl._create_default_https_context = ssl._create_unverified_context
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class ModelLoad():
 
     def __init__(self, opt):
-        ## switch to any model you prefer
         self.model = resnet.resnet34(pretrained = True, num_classes=opt.n_classes)
+        self.model = self.model.to(device)
+        pretrain = torch.load(
+            "resnet34/save_10.pth", map_location=device, weights_only=True
+        )
 
-        self.model = self.model.cuda()
-        #self.model = nn.DataParallel(self.model, device_ids=None)
-        #print('loading pretrained model {}'.format(opt.pretrain_path))
-        pretrain = torch.load('resnet34/save_1.pth')
-
-        # print(net)
         print('--------------------        load the pretrained model        --------------------------------------')
         saved_state_dict = pretrain['state_dict']
-        #saved_state_dict = pretrain.state_dict()
+        # saved_state_dict = pretrain.state_dict()
         print('----------------------------------------------------------')
         new_params = self.model.state_dict().copy()
         for name, param in new_params.items():
-            # print name
             if 'module.'+name in saved_state_dict and param.size() == saved_state_dict['module.'+name].size():
                 new_params[name].copy_(saved_state_dict['module.'+name])
 
         self.model.load_state_dict(new_params)
         self.model.eval()
-
 
     def model_pre(self, img):
         predict = self.model(img)
@@ -131,7 +122,7 @@ if __name__ == '__main__':
                            sour_img = torch.Tensor(torch.from_numpy(tempImg).float().div(255))
                            sour_img = sour_img.permute(2, 0, 1)
                            sour_img     = sour_img.unsqueeze(0)
-                           sour_img     = Variable(sour_img).cuda()
+                           sour_img = Variable(sour_img).to(device)
                            predict =  modelM.model_pre(sour_img)
                            #result = predict.data.cpu().numpy()
                            _, predicted = torch.max(predict, 1)
