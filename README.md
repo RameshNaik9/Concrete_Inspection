@@ -89,3 +89,43 @@ Please check file opts.py
 ![](https://github.com/ccny-ros-pkg/pytorch_Concrete_Inspection/blob/master/image_and_results/output/175.png)
 ![](https://github.com/ccny-ros-pkg/pytorch_Concrete_Inspection/blob/master/image_and_results/output/329.png)
 ![](https://github.com/ccny-ros-pkg/pytorch_Concrete_Inspection/blob/master/image_and_results/output/596.png)
+
+
+***Installation and Setup***
+
+Step 1: Clone the Repository
+```bash
+git clone https://github.com/your-repository.git
+cd your-repository
+```
+
+Step 2: Install Dependencies
+Make sure you have Python installed (3.7 or higher). Then, run the following command to install all required dependencies:
+```bash
+pip install fastapi uvicorn torch torchvision opencv-python pillow
+```
+
+Step 3: Run the FastAPI Server
+To start the FastAPI server, run the following command:
+```
+uvicorn app:app --reload
+```
+This will start the FastAPI server on http://127.0.0.1:8000.
+
+API Endpoints
+POST /process_image/
+This endpoint allows you to upload an image, classify it, and receive the classification and masked image in the response.
+
+Request:
+Method: POST
+URL: http://127.0.0.1:8000/process_image/
+
+Body: Use form-data to upload the image with the key named file.
+
+Response: 
+
+Headers:
+Class: Indicates the classification result. Possible values are Class 0, Class 1, or Class 2.
+
+Image-Size: Provides the dimensions of the original image (e.g., 640x480).
+Body: The masked image in PNG format.
