@@ -13,6 +13,7 @@ from opts import parse_opts
 from model import generate_model
 import ssl
 import logging
+from fastapi import Request, HTTPException
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -225,6 +226,33 @@ async def segment_video(file: UploadFile = File(...)):
     output_video.seek(0)  # Reset stream position
 
     return StreamingResponse(output_video, media_type="video/mp4")
+
+
+@app.post("/labelstudio/submit/")
+async def labelstudio_submit(request: Request):
+    try:
+        # Get the payload from Label Studio
+        payload = await request.json()
+        print("Received labeled data:", json.dumps(payload, indent=4))
+
+        # Process the labeled data here (e.g., save to database, retrain model, etc.)
+
+        return {"status": "success", "message": "Data received"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+import json
+
+async def labelstudio_submit(request: Request):
+    try:
+        # Get the payload from Label Studio
+        payload = await request.json()
+        print("Received labeled data:", json.dumps(payload, indent=4))
+
+        # Process the labeled data here (e.g., save to database, retrain model, etc.)
+
+        return {"status": "success", "message": "Data received"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 # Start FastAPI server
